@@ -23,6 +23,7 @@ describe("GET", () => {
 
           const { categories } = body;
           expect(Array.isArray(categories)).toBe(true);
+          expect(categories.length > 0).toBe(true);
 
           categories.forEach((category) => {
             expect(typeof category.slug).toBe("string");
