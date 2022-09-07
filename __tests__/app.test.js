@@ -13,7 +13,7 @@ afterAll(() => {
 });
 describe("GET", () => {
   describe("/api/categorgies", () => {
-    test("200: Retrieve Data", () => {
+    test("200: Retrieve categories data", () => {
       return request(app)
         .get("/api/categories")
         .expect(200)
@@ -77,5 +77,26 @@ describe("/api/reviews/:reviews_id", () => {
           expect(body.msg).toBe("99999 Not found");
         });
     });
+  });
+});
+describe("/api/users", () => {
+  test("200: Retrieve users data", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((res) => {
+        const body = res.body;
+        expect(typeof body).toBe("object");
+
+        const { users } = body;
+        expect(Array.isArray(users)).toBe(true);
+        expect(users.length > 0).toBe(true);
+
+        users.forEach((user) => {
+          expect(typeof user.username).toBe("string");
+          expect(typeof user.name).toBe("string");
+          expect(typeof user.avatar_url).toBe("string");
+        });
+      });
   });
 });
