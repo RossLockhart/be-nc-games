@@ -16,7 +16,7 @@ app.use((err, req, res, next) => {
   } else if (err.code === "22P02") {
     res.status(400).send({ msg: "Invalid request input" });
   } else if (err.code === "P0002") {
-    res.status(404).send({ msg: "Not found" });
+    res.status(404).send({ msg: "404: Not found" });
   } else {
     res.status(500).send({ msg: "Internal server error" });
   }

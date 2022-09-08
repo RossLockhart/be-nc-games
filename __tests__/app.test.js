@@ -73,8 +73,7 @@ describe("/api/reviews/:reviews_id", () => {
         .get("/api/reviews/99999")
         .expect(404)
         .then(({ body }) => {
-          console.log(body);
-          expect(body.msg).toBe(`99999 Not found`);
+          expect(body.msg).toBe("404: Not found");
         });
     });
   });
@@ -107,17 +106,29 @@ describe("PATCH", () => {
       return request(app)
         .patch("/api/reviews/1")
         .send(voteChange)
-        .expect(200)
+        .expect(201)
         .then(({ body }) => {
           expect(body.review.votes).toBe(3);
         });
     });
   });
   describe("/api/reviews/:reviews_id", () => {
-    test("404: returns an error message when cleint tries to vote for review that doesn't exist", () => {
+    test("404: returns an error message when client tries to vote for review_id that doesn't exist", () => {
       const voteChange = { inc_votes: 2 };
       return request(app)
-        .patch("/api/reviews/noSuchReview")
+        .patch("/api/reviews/99999")
+        .send(voteChange)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("404: Not found");
+        });
+    });
+  });
+  describe("/api/reviews/:reviews_id", () => {
+    test("404: returns an error message when client provideds invalid input", () => {
+      const voteChange = { inc_votes: 2 };
+      return request(app)
+        .patch("/api/reviews/invalidID")
         .send(voteChange)
         .expect(400)
         .then(({ body }) => {
