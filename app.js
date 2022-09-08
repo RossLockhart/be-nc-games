@@ -1,12 +1,14 @@
 const express = require("express");
 const { getCategories } = require("./controllers/categories");
-const { getReview } = require("./controllers/reviews");
+const { getReview, patchReviewVote } = require("./controllers/reviews");
 const { getUsers } = require("./controllers/users");
 const app = express();
+app.use(express.json());
 
 app.get("/api/categories", getCategories);
 app.get("/api/reviews/:review_id", getReview);
 app.get("/api/users", getUsers);
+app.patch("/api/reviews/:reviews_id", patchReviewVote);
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {

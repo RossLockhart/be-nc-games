@@ -100,3 +100,17 @@ describe("/api/users", () => {
       });
   });
 });
+describe("PATCH", () => {
+  describe("/api/reviews/:reviews_id", () => {
+    test("200: Update 'votes' property in review table with the number provided", () => {
+      const voteChange = { inc_votes: 2 };
+      return request(app)
+        .patch("/api/reviews/1")
+        .send(voteChange)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.review.votes).toBe(3);
+        });
+    });
+  });
+});

@@ -1,3 +1,4 @@
+const { response } = require("../app.js");
 const db = require("../db/connection.js");
 
 exports.fetchReview = (review_id) => {
@@ -13,4 +14,17 @@ exports.fetchReview = (review_id) => {
       }
       return returnedReview;
     });
+};
+
+exports.updateReviewVote = (review_id, votes) => {
+  const query = `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *`;
+  return db.query(query, [votes, review_id]).then((result) => {
+    if (result.rows.length === 0) {
+      return Promise.reject({
+        status: 404,
+        msg: "404: NOt found",
+      });
+    }
+    return result.rows[0];
+  });
 };
