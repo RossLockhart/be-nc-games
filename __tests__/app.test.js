@@ -101,7 +101,7 @@ describe("/api/users", () => {
 });
 describe("PATCH", () => {
   describe("/api/reviews/:reviews_id", () => {
-    test("200: Update 'votes' property in review table with the number provided", () => {
+    test("201: Update 'votes' property in review table with the number provided", () => {
       const voteChange = { inc_votes: 2 };
       return request(app)
         .patch("/api/reviews/1")
@@ -120,15 +120,27 @@ describe("PATCH", () => {
         .send(voteChange)
         .expect(404)
         .then(({ body }) => {
-          expect(body.msg).toBe("404: Not found");
+          expect(body.msg).toBe("404: 99999 Not found");
         });
     });
   });
   describe("/api/reviews/:reviews_id", () => {
-    test("404: returns an error message when client provideds invalid input", () => {
-      const voteChange = { inc_votes: 2 };
+    test("400: returns an error message when client provideds invalid vote value e.g non-numerical input", () => {
+      const voteChange = { inc_votes: "invalidID" };
       return request(app)
-        .patch("/api/reviews/invalidID")
+        .patch("/api/reviews/1")
+        .send(voteChange)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid request input");
+        });
+    });
+  });
+  describe("/api/reviews/:reviews_id", () => {
+    test("400: returns an error message when request object does not have a key of inc_votes", () => {
+      const voteChange = { invalid_key: 2 };
+      return request(app)
+        .patch("/api/reviews/1")
         .send(voteChange)
         .expect(400)
         .then(({ body }) => {
