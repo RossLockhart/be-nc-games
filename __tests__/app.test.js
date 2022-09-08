@@ -73,8 +73,7 @@ describe("/api/reviews/:reviews_id", () => {
         .get("/api/reviews/99999")
         .expect(404)
         .then(({ body }) => {
-          console.log(body);
-          expect(body.msg).toBe("99999 Not found");
+          expect(body.msg).toBe("404: Not found");
         });
     });
   });
@@ -98,5 +97,55 @@ describe("/api/users", () => {
           expect(typeof user.avatar_url).toBe("string");
         });
       });
+  });
+});
+describe("PATCH", () => {
+  describe("/api/reviews/:reviews_id", () => {
+    test("201: Update 'votes' property in review table with the number provided", () => {
+      const voteChange = { inc_votes: 2 };
+      return request(app)
+        .patch("/api/reviews/1")
+        .send(voteChange)
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.review.votes).toBe(3);
+        });
+    });
+  });
+  describe("/api/reviews/:reviews_id", () => {
+    test("404: returns an error message when client tries to vote for review_id that doesn't exist", () => {
+      const voteChange = { inc_votes: 2 };
+      return request(app)
+        .patch("/api/reviews/99999")
+        .send(voteChange)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("404: 99999 Not found");
+        });
+    });
+  });
+  describe("/api/reviews/:reviews_id", () => {
+    test("400: returns an error message when client provideds invalid vote value e.g non-numerical input", () => {
+      const voteChange = { inc_votes: "invalidID" };
+      return request(app)
+        .patch("/api/reviews/1")
+        .send(voteChange)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid request input");
+        });
+    });
+  });
+  describe("/api/reviews/:reviews_id", () => {
+    test("400: returns an error message when request object does not have a key of inc_votes", () => {
+      const voteChange = { invalid_key: 2 };
+      return request(app)
+        .patch("/api/reviews/1")
+        .send(voteChange)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid request input");
+        });
+    });
   });
 });
