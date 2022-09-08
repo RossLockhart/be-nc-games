@@ -18,4 +18,6 @@ exports.patchReviewVote = (req, res, next) => {
       res.status(201).send({ review });
     })
     .catch((err) => next(err));
+
+  //
 };
