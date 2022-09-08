@@ -74,7 +74,7 @@ describe("/api/reviews/:reviews_id", () => {
         .expect(404)
         .then(({ body }) => {
           console.log(body);
-          expect(body.msg).toBe("99999 Not found");
+          expect(body.msg).toBe(`99999 Not found`);
         });
     });
   });
@@ -110,6 +110,18 @@ describe("PATCH", () => {
         .expect(200)
         .then(({ body }) => {
           expect(body.review.votes).toBe(3);
+        });
+    });
+  });
+  describe("/api/reviews/:reviews_id", () => {
+    test("404: returns an error message when cleint tries to vote for review that doesn't exist", () => {
+      const voteChange = { inc_votes: 2 };
+      return request(app)
+        .patch("/api/reviews/noSuchReview")
+        .send(voteChange)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid request input");
         });
     });
   });
