@@ -1,12 +1,20 @@
+//all saves should be made to github first,
+// and then saved to heroku: git push heroku main
+
 const express = require("express");
 const { getCategories } = require("./controllers/categories");
-const { getReview, patchReviewVote } = require("./controllers/reviews");
+const {
+  getReviews,
+  getReviewById,
+  patchReviewVote,
+} = require("./controllers/reviews");
 const { getUsers } = require("./controllers/users");
 const app = express();
 app.use(express.json());
 
 app.get("/api/categories", getCategories);
-app.get("/api/reviews/:review_id", getReview);
+app.get("/api/reviews", getReviews);
+app.get("/api/reviews/:review_id", getReviewById);
 app.get("/api/users", getUsers);
 app.patch("/api/reviews/:reviews_id", patchReviewVote);
 

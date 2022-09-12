@@ -3,6 +3,7 @@ const app = require("../app");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index.js");
 const db = require("../db/connection");
+const reviews = require("../db/data/test-data/reviews");
 
 beforeEach(() => {
   return seed(testData);
@@ -32,6 +33,7 @@ describe("GET", () => {
         });
     });
   });
+
   describe("GET", () => {
     describe("/api/reviews/:reviews_id", () => {
       test("200: Returns a review by id number", () => {
@@ -165,4 +167,79 @@ describe("PATCH", () => {
       });
     });
   });
+});
+describe("GET", () => {
+  describe("/api/reviews", () => {
+    test("200: Returns a array of review objects with the following properties", () => {
+      return request(app)
+        .get("/api/reviews")
+        .expect(200)
+        .then((res) => {
+          const reviews = res.body.reviews;
+
+          expect(reviews.length >= 1).toBe(true);
+          reviews.forEach((review) => {
+            expect(review).toEqual(
+              expect.objectContaining({
+                review_id: expect.any(Number),
+                title: expect.any(String),
+                review_body: expect.any(String),
+                designer: expect.any(String),
+                review_img_url: expect.any(String),
+                votes: expect.any(Number),
+                category: expect.any(String),
+                owner: expect.any(String),
+                created_at: expect.any(String),
+                comment_count: expect.any(Number),
+              })
+            );
+          });
+        });
+    });
+  });
+});
+
+describe("/api/reviews?category=dexterity", () => {
+  test("200: Returns a array of reviews filtered by catergory", () => {
+    return request(app)
+      .get("/api/reviews?category=social deduction")
+      .expect(200)
+      .then((res) => {
+        const reviews = res.body.reviews;
+
+        expect(reviews.length >= 1).toBe(true);
+        reviews.forEach((review) => {
+          expect(review.category).toBe("social deduction");
+        });
+      });
+  });
+  test("404: returns error if category does not exist", () => {
+    return request(app)
+      .get("/api/reviews?category=doesNotExist")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("404: doesNotExist Not found");
+      });
+  });
+});
+// test("404: returns error if category exists but has not been reviewed", () => {
+//   return request(app)
+//     .get("/api/reviews?category=children's games")
+//     .expect(200)
+//     .then((res) => {
+//       const reviews = res.body.reviews;
+//       console.log(reviews);
+//       expect(reviews).toEqual([]);
+//     }); //this isn't correct as child games does exist it just hasn;t got a review
+//   //even the name of the test is wrong. we will get back an empty array, so not a standard 404 error.
+// });
+
+test("200: returns reviews in order of date descending", () => {
+  return request(app)
+    .get("/api/reviews")
+    .expect(200)
+    .then(({ body }) => {
+      console.log(body);
+      expect(body.reviews).toBeSortedBy("created_at", { descending: true });
+    });
 });
