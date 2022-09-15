@@ -1,3 +1,6 @@
+//intergration tests = a test that connect to and test a service that lives outside of the code base
+//unit tests = a test that tests a specific 'bit' of logic within your code base
+
 const request = require("supertest");
 const app = require("../app");
 const seed = require("../db/seeds/seed");
@@ -13,15 +16,28 @@ beforeEach(() => {
 afterAll(() => {
   return db.end();
 });
-// describe("GET", () => {
-//   describe("/api/categorgies", () => {
-//     test("200: Retrieve categories data", () => {
-//       return request(app)
-//         .get("/api/categories")
-//         .expect(200)
-//         .then((res) => {
-//           const body = res.body;
-//           expect(typeof body).toBe("object");
+//intergration test
+describe("GET", () => {
+  describe("/api/categorgies", () => {
+    test("200: Retrieve categories data", () => {
+      return request(app)
+        .get("/api/categories")
+        .expect(200)
+        .then((res) => {
+          const body = res.body;
+          expect(typeof body).toBe("object");
+
+          const { categories } = body;
+          expect(Array.isArray(categories)).toBe(true);
+          expect(categories.length > 0).toBe(true);
+
+          categories.forEach((category) => {
+            expect(typeof category.slug).toBe("string");
+            expect(typeof category.description).toBe("string");
+          });
+        });
+    });
+  });
 
 //           const { categories } = body;
 //           expect(Array.isArray(categories)).toBe(true);
