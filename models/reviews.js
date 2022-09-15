@@ -13,9 +13,9 @@ exports.fetchReviews = (category) => {
   query += `ORDER BY created_at DESC`;
 
   return db.query(query, queryValues).then((result) => {
-    console.log(1, result);
+    //console.log(1, result);
     const returnedReview = result.rows;
-    console.log(2, returnedReview);
+    //console.log(2, returnedReview);
     if (returnedReview.length < 1) {
       return Promise.reject({
         status: 404,
@@ -50,7 +50,7 @@ exports.fetchReviewById = (review_id) => {
       return returnedReview[0];
     });
 };
-
+////////////////////////////////////////////////
 exports.updateReviewVote = (review_id, votes) => {
   const query = `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *`;
   return db.query(query, [votes, review_id]).then((result) => {
@@ -63,3 +63,10 @@ exports.updateReviewVote = (review_id, votes) => {
     return result.rows[0];
   });
 };
+
+//sql section from notes
+// https://notes.northcoders.com/courses/js-back-end/node-postgres
+
+//seperate sql injection validator- not in the patch request above- and associated tests
+//make tests for the test, that are for the voteNumberValidataor
+//////////////////////////////////////////////////

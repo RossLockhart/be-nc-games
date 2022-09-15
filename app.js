@@ -16,7 +16,9 @@ app.get("/api/categories", getCategories);
 app.get("/api/reviews", getReviews);
 app.get("/api/reviews/:review_id", getReviewById);
 app.get("/api/users", getUsers);
+/////////////////////////////////////////
 app.patch("/api/reviews/:reviews_id", patchReviewVote);
+///////////////////////////////////////////
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {
