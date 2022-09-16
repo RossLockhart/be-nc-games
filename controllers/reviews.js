@@ -31,12 +31,20 @@ exports.getReviewById = (req, res, next) => {
 exports.patchReviewVote = (req, res, next) => {
   const { reviews_id } = req.params;
   //protect against sql injection here- check we already made it to only accept numbers as well
-  //console.log(1, req.body);
+  console.log("aids", req.params);
   const { inc_votes } = req.body;
+  // if (typeof reviews_id !== "number") {
+  //   return Promise.reject({
+  //     status: 400,
+  //     msg: `400: Invalid request input`,
+  //   });
+  // }
   //protect against sql injection here
   //console.log(2, inc_votes);
+
   updateReviewVote(reviews_id, inc_votes)
     .then((review) => {
+      console.log(review);
       res.status(201).send({ review });
     })
     .catch((err) => next(err));

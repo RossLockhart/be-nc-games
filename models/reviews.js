@@ -68,13 +68,13 @@ exports.updateReviewVote = (review_id, votes) => {
         msg: `400: Invalid request input`,
       });
     }
-    if (typeof review_id !== "number") {
-      return Promise.reject({
-        status: 400,
-        msg: `400: Invalid request input`,
-      }); //this makes me fail tests lines: 186 and 141for getting 404 when here i expect 400
-    } //for the 141 its because the api is a string so 9999 and pg_sleep are just treated as
-    //strings for id_that don't exist rather than an invalid input
+    // if (typeof review_id !== "number") {
+    //   return Promise.reject({
+    //     status: 400,
+    //     msg: `400: Invalid request input`,
+    //   }); //this makes me fail tests lines: 186 and 141for getting 404 when here i expect 400
+    // } //for the 141 its because the api is a string so 9999 and pg_sleep are just treated as
+    // //strings for id_that don't exist rather than an invalid input
     if (votes > 1 || votes < -1) {
       return Promise.reject({
         status: 400,
