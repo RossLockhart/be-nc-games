@@ -36,3 +36,8 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+//need to fish the tests to make sure review_id is numerical
+// then insert the psql regex matchers in the model somehow, while also testing for them
+//the insert the regex sql matchers into the model for the votes also
+//insert the helper function into the model to replace if statement to check review_id is <>1/-1

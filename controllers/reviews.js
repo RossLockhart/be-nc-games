@@ -4,11 +4,11 @@ const {
   updateReviewVote,
 } = require("../models/reviews");
 //////////////////////////
-exports.voteNumberValidator = (numToChangeBy) => {
-  if (numToChangeBy != 1 || numToChangeBy != -1) {
-    throw new Error("Invalid request input");
-  }
-};
+// exports.voteNumberValidator = (numToChangeBy) => {
+//   if (numToChangeBy != 1 || numToChangeBy != -1) {
+//     throw new Error("Invalid request input");
+//   }
+// };
 ///////////////////
 exports.getReviews = (req, res, next) => {
   const { category } = req.query;
@@ -30,12 +30,11 @@ exports.getReviewById = (req, res, next) => {
 //////////////////////////////////////////////////////////
 exports.patchReviewVote = (req, res, next) => {
   const { reviews_id } = req.params;
+  //protect against sql injection here- check we already made it to only accept numbers as well
+  //console.log(1, req.body);
   const { inc_votes } = req.body;
-  voteNumberValidator(inc_votes);
-  // console.log(999, inc_votes);
-  // if (inc_votes !== 1 || inc_votes !== -1) {
-  //   throw new Error("Invalid request input");
-  // } else {
+  //protect against sql injection here
+  //console.log(2, inc_votes);
   updateReviewVote(reviews_id, inc_votes)
     .then((review) => {
       res.status(201).send({ review });
@@ -45,9 +44,3 @@ exports.patchReviewVote = (req, res, next) => {
 //};
 
 ///////////////////////////////////////////////////////////
-//this should be what is needed for the anti sql injection
-/* if (votes) {
-     //  NOT Array.includes(<ITEM TO FIND IN ARRAY>)
-     if (!["age", "cost_at_auction", "treasure_name"].includes(sort_by)) {
-           throw new Error("Invalid query - sort_by");
-            */

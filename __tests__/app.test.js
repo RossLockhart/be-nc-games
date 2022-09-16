@@ -195,23 +195,23 @@ describe("PATCH", () => {
     });
     //error handling for votes exceeding 1
     describe("/api/reviews/:reviews_id", () => {
-      test("400: throws error when inc_votes value exceeds 1", () => {
+      test("400: throws error when inc_votes value exceeds 1 or is less than -1", () => {
         const voteChange = { inc_votes: 2 };
         //
-        voteNumberValidator(voteChange);
+        //voteNumberValidator(voteChange);
         //
         return request(app)
           .patch("/api/reviews/1")
           .send(voteChange)
           .expect(400)
           .then(({ body }) => {
-            expect(voteNumberValidator(inc_votes)).toBe(
-              "Invalid request input"
-            );
+            // expect(voteNumberValidator(inc_votes)).toBe(
+            //   "Invalid request input"
+            // );
 
-            expect(body.msg).toBe("Invalid request input");
+            expect(body.msg).toBe("400: Invalid request input");
           });
-        //this is the second/spare one
+        //this is the spare one that doesn't use the helper function and would have depended on oneoff/not reusable if statments.
         // describe("/api/reviews/:reviews_id", () => {
         //   test("400: throws error when inc_votes value exceeds 1", () => {
         //     const voteChange = { inc_votes: 2 };
@@ -224,6 +224,7 @@ describe("PATCH", () => {
         //       }); //still need to adapt the model to acheive this
       });
     });
+
     describe("/api/reviews/:reviews_id", () => {
       test("400: returns an error message when request object does not have a key of inc_votes", () => {
         const voteChange = { invalid_key: 1 };
@@ -238,6 +239,34 @@ describe("PATCH", () => {
     });
   });
 });
+
+describe("/api/reviews/:reviews_id", () => {
+  test("400: returns an error message when user supplies review_id that  is not a number", () => {
+    const voteChange = { inc_votes: 1 };
+    const reqReview_id = "pg_sleep";
+    return request(app)
+      .patch(`/api/reviews/${reqReview_id}`)
+      .send(voteChange)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid request input");
+      });
+  }); //i dont understand how this passes no matter what, then if i put my if statment back in the model, it still passes but then the test for 'review_id that does not exist e.g999' obvi gets a 400 instead of a 404- i can't get this set up to differ between numbers and string for the supplied review_id
+});
+
+// describe("/api/reviews/:reviews_id", () => {
+//   test("400: returns an error message common inputs for sql injection and sent in the patch instead of a review_id", () => {
+//     const voteChange = { inc_votes: 1 };
+//     return request(app)
+//       .patch("/api/reviews/pg_sleep")
+//       .send(voteChange)
+//       .expect(400)
+//       .then(({ body }) => {
+//         expect(body.msg).toBe("Invalid request input");
+//       });
+//   });
+// });
+
 // describe("GET", () => {
 //   describe("/api/reviews", () => {
 //     test("200: Returns a array of review objects with the following properties", () => {
