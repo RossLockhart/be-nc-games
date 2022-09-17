@@ -37,7 +37,7 @@ app.use((err, req, res, next) => {
 
 module.exports = app;
 
-//need to fish the tests to make sure review_id is numerical
-// then insert the psql regex matchers in the model somehow, while also testing for them
-//the insert the regex sql matchers into the model for the votes also
+//need to fish the tests to make sure review_id is numerical- while stoppijng itinterfering wioth the other test relating to review_id e.g when a number doesn't exist 99999
+// then insert the psql regex matchers in the model somehow, while also testing for them- done this but because of the test problem mentioned above, i either fail or get the wrong error back.
+//the insert the regex sql matchers into the model/controller for the votes also
 //insert the helper function into the model to replace if statement to check review_id is <>1/-1

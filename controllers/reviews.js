@@ -30,21 +30,25 @@ exports.getReviewById = (req, res, next) => {
 //////////////////////////////////////////////////////////
 exports.patchReviewVote = (req, res, next) => {
   const { reviews_id } = req.params;
-  //protect against sql injection here- check we already made it to only accept numbers as well
-  console.log("aids", req.params);
+  console.log("1111", reviews_id);
   const { inc_votes } = req.body;
+  const bannedWords = /\b\w?(DRO|INSER|LIK|AN|pg_slee)\w\b/g;
+  const bannedCharacters = /\?|%|--|\(|/g;
+
+  if (reviews_id.match(bannedCharacters) || reviews_id.match(bannedWords)) {
+    return res.status(400).json({
+      msg: `Invalid request input`,
+    }); //this returns undefined
+  }
   // if (typeof reviews_id !== "number") {
   //   return Promise.reject({
   //     status: 400,
   //     msg: `400: Invalid request input`,
   //   });
   // }
-  //protect against sql injection here
-  //console.log(2, inc_votes);
 
   updateReviewVote(reviews_id, inc_votes)
     .then((review) => {
-      console.log(review);
       res.status(201).send({ review });
     })
     .catch((err) => next(err));

@@ -240,24 +240,10 @@ describe("PATCH", () => {
   });
 });
 
-// describe("/api/reviews/:reviews_id", () => {
-//   test("400: returns an error message when user supplies review_id that  is not a number", () => {
-//     const voteChange = { inc_votes: 1 };
-//     const reqReview_id = "pg_sleep";
-//     return request(app)
-//       .patch(`/api/reviews/${reqReview_id}`)
-//       .send(voteChange)
-//       .expect(400)
-//       .then(({ body }) => {
-//         expect(body.msg).toBe("Invalid request input");
-//       });
-//   }); //i dont understand how this passes no matter what, then if i put my if statment back in the model, it still passes but then the test for 'review_id that does not exist e.g999' obvi gets a 400 instead of a 404- i can't get this set up to differ between numbers and string for the supplied review_id
-// });
-
 describe("/api/reviews/:reviews_id", () => {
   test("400: returns an error message when user supplies review_id that isn't a number", () => {
     const voteChange = { inc_votes: 1 };
-    const reqReview_id = "pg_sleep";
+    const reqReview_id = 9;
     return request(app)
       .patch(`/api/reviews/${reqReview_id}`)
       .send(voteChange)

@@ -58,10 +58,8 @@ exports.fetchReviewById = (review_id) => {
 // to match in combination-- warning: in some cases may match everythign- but i checked it on sql injection and paragraphs of text:     np
 //and an array for the things tat MUST be included e.g review_id, votes
 exports.updateReviewVote = (review_id, votes) => {
-  console.log(review_id, 22222222);
   const query = `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *`; //doesnt use string concatenation or template literals
   return db.query(query, [votes, review_id]).then((result) => {
-    console.log(1111, review_id);
     if (typeof votes !== "number") {
       return Promise.reject({
         status: 400,
