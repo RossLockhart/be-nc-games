@@ -40,12 +40,12 @@ exports.patchReviewVote = (req, res, next) => {
       msg: `Invalid request input`,
     }); //this returns undefined
   }
-  // if (typeof reviews_id !== "number") {
-  //   return Promise.reject({
-  //     status: 400,
-  //     msg: `400: Invalid request input`,
-  //   });
-  // }
+  if (typeof reviews_id !== "number") {
+    return Promise.reject({
+      status: 400,
+      msg: `400: Invalid request input`,
+    });
+  }
 
   updateReviewVote(reviews_id, inc_votes)
     .then((review) => {
