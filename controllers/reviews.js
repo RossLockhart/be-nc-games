@@ -54,5 +54,11 @@ exports.patchReviewVote = (req, res, next) => {
     .catch((err) => next(err));
 };
 //};
+//consider an array on banned terms such as [DROP, INSERT, LIKE, AND, pg_sleep(, --, %, ? ]
+//and then creating a regex checker and doing a .match() against the query in an if statement and if part of the query matches a banned word throw an error,
+//to match the banned WORDS:      /\b\w?(DRO|INSER|LIK|AN|pg_slee)\w\b/g
+//to match the banned charcaters: /\?|%|--|\(|/g
+// to match in combination-- warning: in some cases may match everythign- but i checked it on sql injection and paragraphs of text:     np
+//and an array for the things tat MUST be included e.g review_id, votes
 
 ///////////////////////////////////////////////////////////
