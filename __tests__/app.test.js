@@ -119,140 +119,147 @@ afterAll(() => {
 //   });
 // });
 
-describe("PATCH", () => {
-  describe("/api/reviews/:reviews_id", () => {
-    test("201: Update 'votes' property in the review table according to the review_id provided by the user", () => {
-      const voteChange = { inc_votes: 1 };
-      return request(app)
-        .patch("/api/reviews/1")
-        .send(voteChange)
-        .expect(201)
-        .then(({ body }) => {
-          expect(typeof body.review).toBe("object");
-          expect(body.review.votes).toBe(2);
-        });
-    });
-    describe("/api/reviews/:reviews_id", () => {
-      test("404: returns an error message when user tries to vote for a review_id that doesn't exist", () => {
-        const voteChange = { inc_votes: 1 };
-        return request(app)
-          .patch("/api/reviews/99999")
-          .send(voteChange)
-          .expect(404)
-          .then(({ body }) => {
-            expect(body.msg).toBe("404: 99999 Not found");
-          });
-      });
-    });
+///////////////////////////////BEGINNING OF PROJECT PATCH SUITE////////////////////////////
+//
+//
+// describe("PATCH", () => {
+//   describe("/api/reviews/:reviews_id", () => {
+//     test("201: Update 'votes' property in the review table according to the review_id provided by the user", () => {
+//       const voteChange = { inc_votes: 1 };
+//       return request(app)
+//         .patch("/api/reviews/1")
+//         .send(voteChange)
+//         .expect(201)
+//         .then(({ body }) => {
+//           expect(typeof body.review).toBe("object");
+//           expect(body.review.votes).toBe(2);
+//         });
+//     });
+//     describe("/api/reviews/:reviews_id", () => {
+//       test("404: returns an error message when user tries to vote for a review_id that doesn't exist", () => {
+//         const voteChange = { inc_votes: 1 };
+//         return request(app)
+//           .patch("/api/reviews/99999")
+//           .send(voteChange)
+//           .expect(404)
+//           .then(({ body }) => {
+//             expect(body.msg).toBe("404: 99999 Not found");
+//           });
+//       });
+//     });
 
-    ////////////////
-    // function voteNumberValidator(numToChangeBy) {
-    //   if (numToChangeBy != 1 || numToChangeBy != -1) {
-    //     return new Error("Invalid request input");
-    //   }
-    //   return numToChangeBy;
-    // } //the arg would be  inc_votes
-    ////////////////////////////
-    describe("/api/reviews/:reviews_id", () => {
-      test("400: returns an error message when client provides invalid inc_vote value e.g non-numerical input", () => {
-        const voteChange = { inc_votes: "invalidDataTypeID" };
-        return request(app)
-          .patch("/api/reviews/1")
-          .send(voteChange)
-          .expect(400)
-          .then(({ body }) => {
-            expect(body.msg).toBe("Invalid request input");
-          });
-      });
-    });
-    describe("/api/reviews/:reviews_id", () => {
-      test("201: vote value must be numerical value of 1 e.g {inc_votes:1}", () => {
-        const voteChange = { inc_votes: 1 };
-        // voteNumberValidator(2);
-        const testReview = {
-          title: "Agricola",
-          designer: "Uwe Rosenberg",
-          owner: "mallionaire",
-          review_img_url:
-            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-          review_body: "Farmyard fun!",
-          category: "euro game",
-          created_at: "2021-01-18T10:00:20.514Z",
-          votes: 1,
-        };
-        return request(app)
-          .patch("/api/reviews/1")
-          .send(voteChange)
-          .expect(201)
-          .then((res) => {
-            const body = res.body;
-            const { review } = body;
-            expect(typeof voteChange.inc_votes).toBe("number");
-            expect(review.votes).toBe(testReview.votes + voteChange.inc_votes);
-            expect(review.votes).toBe(testReview.votes + 1);
-          });
-      });
-    });
-    //error handling for votes exceeding 1
-    describe("/api/reviews/:reviews_id", () => {
-      test("400: throws error when inc_votes value exceeds 1 or is less than -1", () => {
-        const voteChange = { inc_votes: 2 };
-        //
-        //voteNumberValidator(voteChange);
-        //
-        return request(app)
-          .patch("/api/reviews/1")
-          .send(voteChange)
-          .expect(400)
-          .then(({ body }) => {
-            // expect(voteNumberValidator(inc_votes)).toBe(
-            //   "Invalid request input"
-            // );
+//     ////////////////
+//     // function voteNumberValidator(numToChangeBy) {
+//     //   if (numToChangeBy != 1 || numToChangeBy != -1) {
+//     //     return new Error("Invalid request input");
+//     //   }
+//     //   return numToChangeBy;
+//     // } //the arg would be  inc_votes
+//     ////////////////////////////
+//     describe("/api/reviews/:reviews_id", () => {
+//       test("400: returns an error message when client provides invalid inc_vote value e.g non-numerical input", () => {
+//         const voteChange = { inc_votes: "invalidDataTypeID" };
+//         return request(app)
+//           .patch("/api/reviews/1")
+//           .send(voteChange)
+//           .expect(400)
+//           .then(({ body }) => {
+//             expect(body.msg).toBe("400: Invalid request input");
+//           });
+//       });
+//     });
+//     describe("/api/reviews/:reviews_id", () => {
+//       test("201: vote value must be numerical value of 1 e.g {inc_votes:1}", () => {
+//         const voteChange = { inc_votes: 1 };
+//         // voteNumberValidator(2);
+//         const testReview = {
+//           title: "Agricola",
+//           designer: "Uwe Rosenberg",
+//           owner: "mallionaire",
+//           review_img_url:
+//             "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+//           review_body: "Farmyard fun!",
+//           category: "euro game",
+//           created_at: "2021-01-18T10:00:20.514Z",
+//           votes: 1,
+//         };
+//         return request(app)
+//           .patch("/api/reviews/1")
+//           .send(voteChange)
+//           .expect(201)
+//           .then((res) => {
+//             const body = res.body;
+//             const { review } = body;
+//             expect(typeof voteChange.inc_votes).toBe("number");
+//             expect(review.votes).toBe(testReview.votes + voteChange.inc_votes);
+//             expect(review.votes).toBe(testReview.votes + 1);
+//           });
+//       });
+//     });
+//     //error handling for votes exceeding 1
+//     describe("/api/reviews/:reviews_id", () => {
+//       test("400: throws error when inc_votes value exceeds 1 or is less than -1", () => {
+//         const voteChange = { inc_votes: 2 };
+//         //
+//         //voteNumberValidator(voteChange);
+//         //
+//         return request(app)
+//           .patch("/api/reviews/1")
+//           .send(voteChange)
+//           .expect(400)
+//           .then(({ body }) => {
+//             // expect(voteNumberValidator(inc_votes)).toBe(
+//             //   "Invalid request input"
+//             // );
+//             console.log("this one", body.msg);
+//             expect(body.msg).toBe("400: Invalid request input");
+//           });
+//         //this is the spare one that doesn't use the helper function and would have depended on oneoff/not reusable if statments.
+//         // describe("/api/reviews/:reviews_id", () => {
+//         //   test("400: throws error when inc_votes value exceeds 1", () => {
+//         //     const voteChange = { inc_votes: 2 };
+//         //     return request(app)
+//         //       .patch("/api/reviews/1")
+//         //       .send(voteChange)
+//         //       .expect(400)
+//         //       .then(({ body }) => {
+//         //         expect(body.msg).toBe("Invalid request input");
+//         //       }); //still need to adapt the model to acheive this
+//       });
+//     });
 
-            expect(body.msg).toBe("400: Invalid request input");
-          });
-        //this is the spare one that doesn't use the helper function and would have depended on oneoff/not reusable if statments.
-        // describe("/api/reviews/:reviews_id", () => {
-        //   test("400: throws error when inc_votes value exceeds 1", () => {
-        //     const voteChange = { inc_votes: 2 };
-        //     return request(app)
-        //       .patch("/api/reviews/1")
-        //       .send(voteChange)
-        //       .expect(400)
-        //       .then(({ body }) => {
-        //         expect(body.msg).toBe("Invalid request input");
-        //       }); //still need to adapt the model to acheive this
-      });
-    });
+//     describe("/api/reviews/:reviews_id", () => {
+//       test("400: returns an error message when request object does not have a key of inc_votes", () => {
+//         const voteChange = { invalid_key: 1 };
+//         return request(app)
+//           .patch("/api/reviews/1")
+//           .send(voteChange)
+//           .expect(400)
+//           .then(({ body }) => {
+//             expect(body.msg).toBe("400: Invalid request input");
+//           });
+//       });
+//     });
+//   });
+// });
 
-    describe("/api/reviews/:reviews_id", () => {
-      test("400: returns an error message when request object does not have a key of inc_votes", () => {
-        const voteChange = { invalid_key: 1 };
-        return request(app)
-          .patch("/api/reviews/1")
-          .send(voteChange)
-          .expect(400)
-          .then(({ body }) => {
-            expect(body.msg).toBe("Invalid request input");
-          });
-      });
-    });
-  });
-});
+// describe("/api/reviews/:reviews_id", () => {
+//   test("400: returns an error message when user supplies review_id that isn't a number", () => {
+//     const voteChange = { inc_votes: 1 };
+//     const reqReview_id = "string";
+//     return request(app)
+//       .patch(`/api/reviews/${reqReview_id}`)
+//       .send(voteChange)
+//       .expect(400)
+//       .then(({ body }) => {
+//         expect(body.msg).toBe("400: Invalid request input");
+//       });
+//   });
+// }); //this one passes even when it is given a number.
 
-describe("/api/reviews/:reviews_id", () => {
-  test("400: returns an error message when user supplies review_id that isn't a number", () => {
-    const voteChange = { inc_votes: 1 };
-    const reqReview_id = 9;
-    return request(app)
-      .patch(`/api/reviews/${reqReview_id}`)
-      .send(voteChange)
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Invalid request input");
-      });
-  });
-}); //passing and shouldn't be
+//
+//
+///////////////////////////////END OF PROJECT PATCH SUITE////////////////////////////
 
 // describe("GET", () => {
 //   describe("/api/reviews", () => {
